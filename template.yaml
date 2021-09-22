@@ -8,6 +8,18 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+
+  TableName:
+    Type: String
+    Default: 'order-websocket-subscriptions'
+    Description: Name of the orders table
+    MinLength: 3
+    MaxLength: 50
+    AllowedPattern: ^[A-Za-z_]+$
+    ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
+
+
 Resources:
   OrdersWebSocketAPI:
     Type: AWS::ApiGatewayV2::Api
@@ -94,7 +106,7 @@ Resources:
     Type: AWS::Serverless::Function
     Policies:
       - DynamoDBCrudPolicy:
-          TableName: OrdersWebSocketSubscriptions
+          TableName: !Ref TableName
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -116,7 +128,7 @@ Resources:
     Type: AWS::Serverless::Function
     Policies:
       - DynamoDBCrudPolicy:
-          TableName: OrdersWebSocketSubscriptions
+          TableName: !Ref TableName
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -139,7 +151,7 @@ Resources:
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: OrdersWebSocketSubscriptions
+            TableName: !Ref TableName
       PackageType: Image
       ImageUri: ECR URL
       ImageConfig:
@@ -187,7 +199,7 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: OrdersWebSocketSubscriptions
+      TableName: !Ref TableName
 
 Outputs:
 
