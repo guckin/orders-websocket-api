@@ -94,7 +94,7 @@ Resources:
     Type: AWS::Serverless::Function
     Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: OrdersWebSocketSubscriptions
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -116,7 +116,7 @@ Resources:
     Type: AWS::Serverless::Function
     Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: OrdersWebSocketSubscriptions
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -139,7 +139,7 @@ Resources:
     Properties:
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref TableName
+            TableName: OrdersWebSocketSubscriptions
       PackageType: Image
       ImageUri: ECR URL
       ImageConfig:
@@ -187,7 +187,7 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: Subscriptions
+      TableName: OrdersWebSocketSubscriptions
 
 Outputs:
 
