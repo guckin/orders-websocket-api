@@ -186,7 +186,7 @@ Resources:
             - AttributeName: "orderId"
               KeyType: "HASH"
           Projection:
-            ProjectionType: All
+            ProjectionType: ALL
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
@@ -195,7 +195,7 @@ Resources:
             - AttributeName: "connectionId"
               KeyType: "HASH"
           Projection:
-            ProjectionType: All
+            ProjectionType: ALL
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
