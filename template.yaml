@@ -16,7 +16,7 @@ Parameters:
     Description: Name of the orders table
     MinLength: 3
     MaxLength: 50
-    AllowedPattern: ^[A-Za-z_]+$
+    AllowedPattern: ^[A-Za-z-]+$
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
 
 
