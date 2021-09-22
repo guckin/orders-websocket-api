@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  serverless-websocket-api-template
+  orders-websocket-api
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -9,16 +9,16 @@ Globals:
     Timeout: 3
 
 Resources:
-  TemplateWebSocketAPI:
+  OrdersWebSocketAPI:
     Type: AWS::ApiGatewayV2::Api
     Properties:
-      Name: TemplateWebSocketAPI
+      Name: OrdersWebSocketAPI
       ProtocolType: WEBSOCKET
       RouteSelectionExpression: "$request.body.action"
   ConnectRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       RouteKey: $connect
       AuthorizationType: NONE
       OperationName: ConnectRoute
@@ -29,7 +29,7 @@ Resources:
   ConnectInteg:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       Description: Connect Integration
       IntegrationType: AWS_PROXY
       IntegrationUri:
@@ -38,7 +38,7 @@ Resources:
   DisconnectRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       RouteKey: $disconnect
       AuthorizationType: NONE
       OperationName: DisconnectRoute
@@ -49,7 +49,7 @@ Resources:
   DisconnectInteg:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       Description: Disconnect Integration
       IntegrationType: AWS_PROXY
       IntegrationUri:
@@ -58,7 +58,7 @@ Resources:
   SubscribeRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       RouteKey: subscribe
       AuthorizationType: NONE
       OperationName: SubscribeRoute
@@ -69,7 +69,7 @@ Resources:
   SubscribeInteg:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
       Description: Subscribe Integration
       IntegrationType: AWS_PROXY
       IntegrationUri:
@@ -82,14 +82,14 @@ Resources:
       - DisconnectRoute
       - SubscribeRoute
     Properties:
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
   Stage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
       StageName: Prod
       Description: Prod Stage
       DeploymentId: !Ref Deployment
-      ApiId: !Ref TemplateWebSocketAPI
+      ApiId: !Ref OrdersWebSocketAPI
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -104,7 +104,7 @@ Resources:
   OnConnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
-      - TemplateWebSocketAPI
+      - OrdersWebSocketAPI
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OnConnectFunction
@@ -123,7 +123,7 @@ Resources:
   OnDisconnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
-      - TemplateWebSocketAPI
+      - OrdersWebSocketAPI
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OnDisconnectFunction
@@ -142,7 +142,7 @@ Resources:
   OnSubscribePermission:
     Type: AWS::Lambda::Permission
     DependsOn:
-      - TemplateWebSocketAPI
+      - OrdersWebSocketAPI
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OnSubscribeFunction
@@ -164,4 +164,4 @@ Outputs:
 
   WebSocketURI:
     Description: "The WSS Protocol URI to connect to"
-    Value: !Join [ '', [ 'wss://', !Ref TemplateWebSocketAPI, '.execute-api.',!Ref 'AWS::Region','.amazonaws.com/',!Ref 'Stage'] ]
+    Value: !Join [ '', [ 'wss://', !Ref OrdersWebSocketAPI, '.execute-api.',!Ref 'AWS::Region','.amazonaws.com/',!Ref 'Stage'] ]
