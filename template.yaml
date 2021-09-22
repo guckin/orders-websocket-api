@@ -19,7 +19,6 @@ Parameters:
     AllowedPattern: ^[A-Za-z-]+$
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
 
-
 Resources:
   OrdersWebSocketAPI:
     Type: AWS::ApiGatewayV2::Api
@@ -188,12 +187,18 @@ Resources:
               KeyType: "HASH"
           Projection:
             ProjectionType: All
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         - IndexName: ConnectionIdGSI
           KeySchema:
             - AttributeName: "connectionId"
               KeyType: "HASH"
           Projection:
             ProjectionType: All
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
