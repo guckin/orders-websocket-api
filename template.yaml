@@ -92,6 +92,9 @@ Resources:
       ApiId: !Ref OrdersWebSocketAPI
   OnConnectFunction:
     Type: AWS::Serverless::Function
+    Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref TableName
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -111,6 +114,9 @@ Resources:
       Principal: apigateway.amazonaws.com
   OnDisconnectFunction:
     Type: AWS::Serverless::Function
+    Policies:
+      - DynamoDBCrudPolicy:
+          TableName: !Ref TableName
     Properties:
       PackageType: Image
       ImageUri: ECR URL
@@ -131,6 +137,9 @@ Resources:
   OnSubscribeFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableName
       PackageType: Image
       ImageUri: ECR URL
       ImageConfig:
@@ -147,6 +156,38 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OnSubscribeFunction
       Principal: apigateway.amazonaws.com
+  Table:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "orderId"
+          AttributeType: "S"
+        - AttributeName: "connectionId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - IndexName: OrderIdGSI
+          KeySchema:
+            - AttributeName: "orderId"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: All
+        - IndexName: ConnectionIdGSI
+          KeySchema:
+            - AttributeName: "connectionId"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: All
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        SSEEnabled: True
+      TableName: Subscriptions
 
 Outputs:
 
