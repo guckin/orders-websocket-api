@@ -55,32 +55,32 @@ Resources:
       IntegrationUri:
         Fn::Sub:
           arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OnDisconnectFunction.Arn}/invocations
-  SendRoute:
+  SubscribeRoute:
     Type: AWS::ApiGatewayV2::Route
     Properties:
       ApiId: !Ref TemplateWebSocketAPI
-      RouteKey: sendmessage
+      RouteKey: subscribe
       AuthorizationType: NONE
-      OperationName: SendRoute
+      OperationName: SubscribeRoute
       Target: !Join
         - '/'
         - - 'integrations'
-          - !Ref SendInteg
-  SendInteg:
+          - !Ref SubscribeInteg
+  SubscribeInteg:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
       ApiId: !Ref TemplateWebSocketAPI
-      Description: Send Integration
+      Description: Subscribe Integration
       IntegrationType: AWS_PROXY
       IntegrationUri:
         Fn::Sub:
-          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SendMessageFunction.Arn}/invocations
+          arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${OnSubscribeFunction.Arn}/invocations
   Deployment:
     Type: AWS::ApiGatewayV2::Deployment
     DependsOn:
       - ConnectRoute
-      - SendRoute
       - DisconnectRoute
+      - SubscribeRoute
     Properties:
       ApiId: !Ref TemplateWebSocketAPI
   Stage:
@@ -128,24 +128,24 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref OnDisconnectFunction
       Principal: apigateway.amazonaws.com
-  SendMessageFunction:
+  OnSubscribeFunction:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
       ImageUri: ECR URL
       ImageConfig:
-        Command: [ "lambdas.sendMessageFunction" ]
+        Command: [ "lambdas.onSubscribeFunction" ]
     Metadata:
       DockerTag: nodejs14.x-v1
       DockerContext: .
       Dockerfile: Dockerfile
-  SendMessagePermission:
+  OnSubscribePermission:
     Type: AWS::Lambda::Permission
     DependsOn:
       - TemplateWebSocketAPI
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref SendMessageFunction
+      FunctionName: !Ref OnSubscribeFunction
       Principal: apigateway.amazonaws.com
 
 Outputs:
@@ -158,9 +158,9 @@ Outputs:
     Description: "OnDisconnect function ARN"
     Value: !GetAtt OnDisconnectFunction.Arn
 
-  SendMessageFunctionArn:
-    Description: "SendMessage function ARN"
-    Value: !GetAtt SendMessageFunction.Arn
+  OnSubscribeFunctionArn:
+    Description: "OnSubscribeFunction function ARN"
+    Value: !GetAtt OnSubscribeFunction.Arn
 
   WebSocketURI:
     Description: "The WSS Protocol URI to connect to"

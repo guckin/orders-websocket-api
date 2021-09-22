@@ -17,11 +17,11 @@ export const onDisconnectFunction: APIGatewayProxyHandler = async () => {
 };
 
 
-export const sendMessageFunction: APIGatewayProxyHandler = async () => {
-    console.log('message sending not implemented');
+export const onSubscribeFunction: APIGatewayProxyHandler = async () => {
+    console.log('client subscribed');
     return {
         statusCode: 200,
-        body: 'No Data sent.'
+        body: 'Subscribed.'
     };
 };
 

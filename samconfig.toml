@@ -8,3 +8,8 @@ s3_prefix = "serverless-websocket-api-template"
 region = "us-west-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+image_repositories = [
+    "OnConnectFunction=084882962555.dkr.ecr.us-west-2.amazonaws.com/orders-websocket-api-onconnect-function",
+    "OnDisconnectFunction=084882962555.dkr.ecr.us-west-2.amazonaws.com/orders-websocket-api-ondisconnect-function",
+    "OnSubscribeFunction=084882962555.dkr.ecr.us-west-2.amazonaws.com/orders-websocket-api-onsubscribe-function"
+]

@@ -1,4 +1,4 @@
-import {onConnectFunction, onDisconnectFunction, sendMessageFunction} from "../src/lambdas";
+import {onConnectFunction, onDisconnectFunction, onSubscribeFunction} from "../src/lambdas";
 import {APIGatewayProxyHandler} from "aws-lambda";
 
 describe('lambdas', () => {
@@ -24,13 +24,13 @@ describe('lambdas', () => {
         });
     });
 
-    describe('sendMessageFunction', () => {
+    describe('onSubscribeFunction', () => {
         it('executes successfully', async () => {
-            const result = await sendMessageFunction(...getParams());
+            const result = await onSubscribeFunction(...getParams());
 
             expect(result).toEqual({
                 statusCode: 200,
-                body: 'No Data sent.'
+                body: 'Subscribed.'
             });
         });
     });
